@@ -8,12 +8,13 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: '100%',
-        alignItems: 'center',
-        flexDirection: 'row',
-        justifyContent: 'center',
+        flexDirection: 'column',
         flex:1,
         paddingVertical:10,
         paddingHorizontal:10
+    },
+    fieldContainer:{
+        flexDirection: 'row',
     },
     input: {
         borderColor:'#858585',
@@ -21,6 +22,13 @@ const styles = StyleSheet.create({
         borderRadius:5,
         height: 40
     },
+    label:{
+        fontSize:20
+    },
+    error:{
+        fontSize: 12,
+        color:'#ff0c27'
+    }
 });
 
 class FormField extends Component {
@@ -35,20 +43,34 @@ class FormField extends Component {
         }
     }
 
+    renderErrors() {
+        let errors = [];
+        if(this.props.errors){
+            for (let i in this.props.errors){
+                errors.push(<Text style={styles.error} key={i}>{this.props.errors[i]}</Text>)
+            }
+        }
+        return errors;
+    }
+
+
     render() {
         return (
             <View style={styles.container}>
-                <View style={styles.container_half}>
-                    <Text>{this.props.label}</Text>
+                <View style={styles.fieldContainer}>
+                    <View style={styles.container_half}>
+                        <Text style={styles.label}>{this.props.label}</Text>
+                    </View>
+                    <View style={styles.container_half}>
+                        <TextInput
+                            secureTextEntry={this.props.secureTextEntry}
+                            style={[styles.input]}
+                            placeholder={this.props.placeholder}
+                            value={this.props.value}
+                            onChangeText={(text) => this.onChangeText(text)}/>
+                    </View>
                 </View>
-                <View style={styles.container_half}>
-                    <TextInput
-                        style={[styles.input]}
-                        placeholder={this.props.placeholder}
-                        value={this.props.value}
-                        onChangeText={(text) => this.onChangeText(text)}/>
-                </View>
-
+                {this.renderErrors()}
             </View>
         );
     }

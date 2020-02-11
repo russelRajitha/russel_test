@@ -2,6 +2,18 @@ import React, {Component} from 'react';
 import {StyleSheet, View} from 'react-native';
 import FormField from './FormField';
 import Button from './Button';
+import validate from 'validate.js';
+
+
+const validations = {
+    userEmail:{
+        email:true,
+        presence: true,
+    },
+    userPassword:{
+        presence: true,
+    }
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -19,18 +31,45 @@ class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            text: '',
+            formData: {
+                userEmail:'',
+                userPassword:null
+            },
+            errors:{
+                userEmail:[],
+                userPassword:[]
+            }
         };
     }
 
-    onChangeText(text) {
+    onChangeText(text,key) {
+        let {formData} = this.state;
+
+        formData[key] = text;
+
         this.setState({
-            text: text,
+            formData: formData,
         });
     }
 
     onPress() {
+        let {formData} = this.state;
 
+        let errors = validate(formData, validations);
+        if(errors === undefined){
+            this.setState({
+                errors:{
+                    userEmail: [],
+                    userPassword: [],
+                }
+            })
+        }
+        else {
+            console.log(errors)
+            this.setState({
+                errors:errors
+            })
+        }
     }
 
     render() {
@@ -38,10 +77,21 @@ class SignIn extends Component {
             <View style={styles.container}>
                 <View style={styles.formContainer}>
                     <FormField
-                        label={'Field Label'}
-                        placeholder={'Place Holder'}
-                        onChangeText={(text) => this.onChangeText(text)}
-                        value={this.state.text}
+                        label={'Email'}
+                        placeholder={'Email'}
+                        onChangeText={(text) => this.onChangeText(text,'userEmail')}
+                        value={this.state.formData.userEmail}
+                        errors={this.state.errors.userEmail}
+                    />
+                </View>
+                <View style={styles.formContainer}>
+                    <FormField
+                        secureTextEntry={true}
+                        label={'Password'}
+                        placeholder={'Password'}
+                        onChangeText={(text) => this.onChangeText(text,'userPassword')}
+                        value={this.state.formData.userPassword}
+                        errors={this.state.errors.userPassword}
                     />
                 </View>
                 <View style={[styles.formContainer,{justifyContent:'flex-end'}]}>
