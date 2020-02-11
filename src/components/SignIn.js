@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View,Text} from 'react-native';
 import FormField from './FormField';
 import Button from './Button';
 import validate from 'validate.js';
@@ -65,7 +65,6 @@ class SignIn extends Component {
             })
         }
         else {
-            console.log(errors)
             this.setState({
                 errors:errors
             })
@@ -75,6 +74,7 @@ class SignIn extends Component {
     render() {
         return (
             <View style={styles.container}>
+                <Text style={{alignSelf:'center',fontSize:30,marginBottom:20}}>Sign In</Text>
                 <View style={styles.formContainer}>
                     <FormField
                         label={'Email'}
@@ -96,7 +96,7 @@ class SignIn extends Component {
                 </View>
                 <View style={[styles.formContainer,{justifyContent:'flex-end'}]}>
                     <Button
-                        title={"Submit"}
+                        title={"Sign In"}
                         onPress={() => this.onPress()}
                     />
 
